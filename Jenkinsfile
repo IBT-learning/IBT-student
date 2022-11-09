@@ -35,5 +35,18 @@ pipeline {
                 }
             }
         }
+        stage('Push to ECR') {
+            steps {
+                script{
+                    //https://<AwsAccountNumber>.dkr.ecr.<region>.amazonaws.com/ibt-student', 'ecr:<region>:<credentialsId>
+                    docker.withRegistry('https://630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student', 'ecr:us-east-2:ibt-ecr') {
+                    // build image
+                    def myImage = docker.build("630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest")
+                    // push image
+                    myImage.push()
+                    }
+                }
+            }
+        }
     }
 }
