@@ -48,5 +48,10 @@ pipeline {
                 }
             }
         }
+        stage('Trivy Scan') {
+            steps {
+                sh 'trivy image 630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest'
+            }
+        }
     }
 }
