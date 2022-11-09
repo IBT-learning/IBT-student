@@ -27,5 +27,13 @@ pipeline {
               }
             }
         }
+        stage('build Docker Container') {
+            steps {
+                script {
+                    // build image
+                    docker.build("630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest")
+                }
+            }
+        }
     }
 }
