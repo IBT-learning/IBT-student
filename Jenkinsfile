@@ -50,8 +50,22 @@ pipeline {
         }
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image 630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest'
+                sh 'trivy image --format template --template "@/var/lib/jenkins/trivy_tmp/html.tpl" --output trivy_report.html 630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest'
             }
         }
     }
+    post {
+        always {
+            archiveArtifacts artifacts: "trivy_report.html", fingerprint: true
+
+            publishHTML (target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: '.',
+                reportFiles: 'trivy_report.html',
+                reportName: 'Trivy Scan',
+                ])
+            }
+        }
 }
