@@ -6,13 +6,13 @@ pipeline {
     stages{
         // NPM dependencies
         stage('pull npm dependencies') {
-            step {
+            steps {
                 sh 'cd app && npm install'
             }
         }
         // Run Unit test
         stage('Run Unit Test') {
-            step {
+            steps {
                 sh 'cd app && npm test'
             }
         }
