@@ -48,7 +48,7 @@ pipeline {
                 }
             }
         }
-        stage('Trivy Scan') {
+        stage('Trivy Scan (Aqua)') {
             steps {
                 sh 'trivy image --format template --template "@/var/lib/jenkins/trivy_tmp/html.tpl" --output trivy_report.html 630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest'
             }
