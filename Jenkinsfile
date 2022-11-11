@@ -76,6 +76,29 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to prod') {
+                steps {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: "ibt-ecr",
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]){
+                        ansiblePlaybook(
+                              playbook: 'ansible/deploy-docker.yaml',
+                              inventory: 'ansible/hosts',
+                              credentialsId: 'vm-ssh',
+                              colorized: true,
+                              extraVars: [
+                                  "myHosts" : "prodServer",
+                                  "compose_file": "${WORKSPACE}/docker-compose.yaml",
+                                  "access_key": AWS_ACCESS_KEY_ID,
+                                  "access_secret": AWS_SECRET_ACCESS_KEY
+                              ]
+                          )
+                    }
+                }
+            }
     }
     post {
         always {
