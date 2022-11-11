@@ -1,7 +1,7 @@
 version: '3'
 services:
   ibt-student:
-    image: 630437092685.dkr.ecr.us-east-1.amazonaws.com/ibt-student:4.0
+    image: 630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest
     ports:
       - 3000:3000
   mongodb:
