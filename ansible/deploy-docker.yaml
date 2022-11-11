@@ -1,6 +1,6 @@
 ---
 - name: Deploy code on servers
-  hosts: devServer
+  hosts: "{{myHosts}}"
   become: yes
   remote_user: root
   become_user: root
@@ -19,7 +19,7 @@
 
     - name: Copy docker compose file
       copy:
-        src: /Users/jashanpreetsingh/workspace/ibt/source/my-app/docker-compose.yaml
+        src: "{{compose_file}}"
         dest: /opt/webapps/
         mode: 0755
 

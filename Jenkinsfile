@@ -53,6 +53,29 @@ pipeline {
                 sh 'trivy image --format template --template "@/var/lib/jenkins/trivy_tmp/html.tpl" --output trivy_report.html 630437092685.dkr.ecr.us-east-2.amazonaws.com/ibt-student:latest'
             }
         }
+        stage('Deploy to dev') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: "ibt-ecr",
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]){
+                    ansiblePlaybook(
+                          playbook: 'ansible/deploy-docker.yaml',
+                          inventory: 'ansible/hosts',
+                          credentialsId: 'vm-ssh',
+                          colorized: true,
+                          extraVars: [
+                              "myHosts" : "devServer",
+                              "compose_file": "${WORKSPACE}/docker-compose.yaml",
+                              "access_key": AWS_ACCESS_KEY_ID,
+                              "access_secret": AWS_SECRET_ACCESS_KEY
+                          ]
+                      )
+                }
+            }
+        }
     }
     post {
         always {
