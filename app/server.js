@@ -11,8 +11,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, "index.html"));
-  });
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 app.get('/profile-picture', function (req, res) {
   let img = fs.readFileSync(path.join(__dirname, "images/profile-a.jpg"));
@@ -24,7 +24,7 @@ app.get('/profile-picture', function (req, res) {
 let mongoUrlLocal = "mongodb://admin:password@localhost:27017";
 
 // use when starting application as docker container
-let mongoUrlDocker = "mongodb://admin:password@mongodb";
+let mongoUrlDocker = "mongodb://"+process.env.mongoUser+":"+process.env.mongoPassword+"@"+process.env.mongoUrl;
 
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
 let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
